@@ -45,13 +45,10 @@ export function AppPreview() {
                     <div className="relative">
                         <div className="bg-[#1a2b6d] rounded-3xl p-6 mb-8">
                             <h3 className="text-white text-xl font-semibold mb-4">Happiness in each shipment</h3>
-                            <div className="relative h-40 bg-[#2a3b8d] rounded-2xl overflow-hidden">
-                                <div
-                                    className="absolute bottom-0 left-0 right-0 h-24 bg-[#3a4bad]"
-                                    style={{
-                                        borderRadius: "100% 100% 0 0",
-                                    }}
-                                />
+                            <div
+                                className="relative h-40 bg-[#3a3b8d] rounded-2xl overflow-hidden bg-cover bg-center"
+                                style={{ backgroundImage: "url('https://imagedelivery.net/xaKlCos5cTg_1RWzIu_h-A/75422add-e630-4599-f7c3-28f22fc7e500/public')" }}
+                            >
                                 <div className="absolute top-4 right-4 w-2 h-2 bg-yellow-400 rounded-full" />
                             </div>
                         </div>
