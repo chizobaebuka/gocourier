@@ -11,6 +11,7 @@ export function Hero() {
             className="relative min-h-screen flex items-center"
             style={{
                 // backgroundImage: `url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-02-10%20at%2013.10.52-TKz72a1T64u70yQUr9V7mPbnzTkfA6.jpeg')`,
+                backgroundImage: `url('https://imagedelivery.net/xaKlCos5cTg_1RWzIu_h-A/a476cef3-de08-4daa-fb63-73b8f09c4f00/public')`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
             }}

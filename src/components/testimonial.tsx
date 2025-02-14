@@ -15,11 +15,10 @@ export function Testimonial() {
                     </div>
                 </div>
                 <blockquote className="text-white text-lg">
-                    "I love the analytics that labor.design offers all in one place. I love the analytics that labor.design offers
-                    all places."
+                    &quot;I love the analytics that labor.design offers all in one place. I love the analytics that labor.design offers
+                    all places.&quot;
                 </blockquote>
             </div>
         </div>
     )
 }
-

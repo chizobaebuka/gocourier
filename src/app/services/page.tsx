@@ -8,7 +8,7 @@ export default function ServicesPage() {
             <div className="text-center mb-16">
                 <h1 className="text-4xl font-bold text-cyan-400 mb-4">Our Services</h1>
                 <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-                    Discover the wide range of services we offer to meet your logistics needs. From fast delivery to secure storage, we've got you covered.
+                    Discover the wide range of services we offer to meet your logistics needs. From fast delivery to secure storage, we&apos;ve got you covered.
                 </p>
             </div>
 
