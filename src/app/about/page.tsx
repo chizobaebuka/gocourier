@@ -1,4 +1,6 @@
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 export default function About() {
@@ -84,9 +86,11 @@ export default function About() {
                 <div className="text-center">
                     <h2 className="text-3xl font-bold text-cyan-400 mb-4">Ready to Get Started?</h2>
                     <p className="text-gray-400 mb-8">Join thousands of satisfied customers today.</p>
-                    <button className="bg-cyan-400 text-navy-900 px-8 py-3 rounded-lg hover:bg-cyan-300 transition-colors duration-300 font-semibold">
+                    <Link href="/contact" passHref>
+                        <Button className="bg-cyan-400 text-navy-900 px-8 py-3 rounded-lg hover:bg-cyan-300 transition-colors duration-300 font-semibold">
                         Contact Us
-                    </button>
+                        </Button>
+                    </Link>
                 </div>
             </div>
         </section>
