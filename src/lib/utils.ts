@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx"
+import { toast } from "react-toastify";
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -10,6 +11,14 @@ export function generateTrackingNumber(description: string): string {
   const randomCode = Math.floor(1000000 + Math.random() * 9000000); 
   return `${firstWord}-${randomCode}`;
 }
+
+interface EmailNotification {
+  to: string;
+  subject: string;
+  text: string;
+  html: string;
+}
+
 
 // Reverse geocoding using Geoapify API
 export async function getAddressFromCoordinates(lat: number, lon: number): Promise<string> {
@@ -96,3 +105,24 @@ export async function getCoordinatesFromAddress(address: string) {
       throw new Error("Failed to fetch coordinates");
   }
 }
+
+export const sendEmailNotification = async (emailData: EmailNotification) => {
+  try {
+      const response = await fetch('/api/send-email', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(emailData),
+      });
+
+      if (!response.ok) {
+          throw new Error('Failed to send email notification');
+      }
+
+      toast.success('Email notification sent successfully');
+  } catch (error) {
+      console.error('Error sending email:', error);
+      toast.error('Failed to send email notification');
+  }
+};

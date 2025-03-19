@@ -56,6 +56,41 @@ export default function SignupPage() {
             if (res.status === 409) {
                 toast.error("User with this email already exists.");
             } else if (res.ok) {
+                try {
+                    await fetch('/api/send-email', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            to: formData.email,
+                            subject: 'Welcome to GoCourier!',
+                            text: `
+                                Hi ${formData.name},
+                                
+                                Welcome to GoCourier! We're excited to have you on board.
+                                
+                                You've successfully created a ${formData.accountType} account.
+                                
+                                You can now log in and start using our services.
+                                
+                                Best regards,
+                                The GoCourier Team
+                            `,
+                            html: `
+                                <h2>Welcome to GoCourier!</h2>
+                                <p>Hi ${formData.name},</p>
+                                <p>Welcome to GoCourier! We're excited to have you on board.</p>
+                                <p>You've successfully created a <strong>${formData.accountType}</strong> account.</p>
+                                <p>You can now log in and start using our services.</p>
+                                <br>
+                                <p>Best regards,</p>
+                                <p>The GoCourier Team</p>
+                            `
+                        })
+                    });
+                } catch (emailError) {
+                    console.error('Failed to send welcome email:', emailError);
+                }
+
                 toast.success("Signed up successfully! Please sign in.");
                 router.replace("/signin");
             } else {

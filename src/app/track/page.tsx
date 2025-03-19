@@ -84,63 +84,6 @@ const TrackingPage = () => {
         }
     };
 
-    // const handleTrack = async () => {
-    //     setLoading(true);
-    //     setShowMap(true);
-    
-    //     try {
-    //         const response = await fetch(`/api/packages?trackingNumber=${trackingNumber}`);
-    //         if (!response.ok) throw new Error("Failed to fetch package details.");
-    
-    //         const data = await response.json();
-    //         if (!data.packages) {
-    //             toast.error("Package not found!");
-    //             return;
-    //         }
-    
-    //         const foundPackage = data.packages;
-    //         console.log("Fetched package data:", foundPackage); // Debugging
-    
-    //         setPkg((prev) => ({
-    //             ...prev,
-    //             trackingNumber: foundPackage.trackingNumber,
-    //             sender: foundPackage.sender,
-    //             recipient: foundPackage.recipient,
-    //             status: foundPackage.status,
-    //             currentLocation: foundPackage.currentLocation,
-    //             destinationLocation: foundPackage.destinationLocation,
-    //         }));
-    
-    //         // Validate if locations exist
-    //         if (!foundPackage.currentLocation || !foundPackage.destinationLocation) {
-    //             throw new Error("Missing location data.");
-    //         }
-    
-    //         const { lat: currentLat, lng: currentLng } = foundPackage.currentLocation || {};
-    //         const { lat: destLat, lng: destLng } = foundPackage.destinationLocation || {};
-    
-    //         if (currentLat == null || currentLng == null || destLat == null || destLng == null) {
-    //             throw new Error("Incomplete location coordinates.");
-    //         }
-    
-    //         // Fetch addresses
-    //         const currentAddr = await getAddressFromCoordinates(currentLat, currentLng);
-    //         const destinationAddr = await getAddressFromCoordinates(destLat, destLng);
-    
-    //         setCurrentAddress(currentAddr);
-    //         setDestinationAddress(destinationAddr);
-    
-    //         console.log("Updated destination location:", foundPackage.destinationLocation);
-    //         console.log("Updated destination address:", destinationAddr);
-    
-    //     } catch (error) {
-    //         console.error("Error tracking package:", error);
-    //         toast.error("Error fetching package details.");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
     // Reverse geocoding using Geoapify API
     async function getAddressFromCoordinates(lat: number, lon: number): Promise<string> {
         const apiKey = process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY;
@@ -163,89 +106,6 @@ const TrackingPage = () => {
             return "Error retrieving address";
         }
     }
-
-    // Initialize the map when `showMap` and `pkg` are true
-    // useEffect(() => {
-    //     if (showMap && pkg && mapContainerRef.current) {
-    //         console.log("Re-initializing map...");
-            
-    //         const map = new maplibregl.Map({
-    //             container: mapContainerRef.current,
-    //             style: `https://maps.geoapify.com/v1/styles/klokantech-basic/style.json?apiKey=${process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY}`,
-    //             center: [pkg.currentLocation.lng, pkg.currentLocation.lat],
-    //             zoom: 14,
-    //         });
-    
-    //         map.on("load", async () => {
-    //             // Remove any existing markers and sources before adding new ones
-    //             // const layers = map.getStyle().layers;
-    //             // if (layers) {
-    //             //     layers.forEach((layer) => {
-    //             //         if (layer.id === "route") map.removeLayer(layer.id);
-    //             //     });
-    //             // }
-    //             // const routeSource = map.getSource("route");
-    //             // if (routeSource) {
-    //             //     map.removeSource("route");
-    //             // }
-    
-    //             // Add updated markers
-    //             new maplibregl.Marker({ color: 'blue' })
-    //                 .setLngLat([pkg.currentLocation.lng, pkg.currentLocation.lat])
-    //                 .setPopup(new maplibregl.Popup().setHTML(`Sent From: ${currentAddress}`))
-    //                 .addTo(map);
-    
-    //             new maplibregl.Marker({ color: "red" })
-    //                 .setLngLat([pkg.destinationLocation.lng, pkg.destinationLocation.lat])
-    //                 .setPopup(new maplibregl.Popup().setHTML(`Deliver to: ${destinationAddress}`))
-    //                 .addTo(map);
-    
-    //             console.log("New destination marker set at:", pkg.destinationLocation);
-    
-    //             // Fetch new route
-    //             const routeCoordinates = await getRouteFromCoordinates(
-    //                 pkg.currentLocation.lat,
-    //                 pkg.currentLocation.lng,
-    //                 pkg.destinationLocation.lat,
-    //                 pkg.destinationLocation.lng
-    //             );
-    
-    //             if (routeCoordinates) {
-    //                 map.addSource('route', {
-    //                     type: 'geojson',
-    //                     data: {
-    //                         type: 'Feature',
-    //                         properties: {},
-    //                         geometry: {
-    //                             type: "LineString",
-    //                             coordinates: routeCoordinates
-    //                         },
-    //                     },
-    //                 });
-    
-    //                 map.addLayer({
-    //                     id: 'route',
-    //                     type: 'line',
-    //                     source: 'route',
-    //                     layout: {
-    //                         'line-join': "round",
-    //                         'line-cap': "round",
-    //                     },
-    //                     paint: {
-    //                         'line-color': '#6084eb',
-    //                         'line-width': 8,
-    //                     },
-    //                 });
-    
-    //                 console.log("Updated route added.");
-    //             } else {
-    //                 console.error("No route found.");
-    //             }
-    //         });
-    
-    //         return () => map.remove();
-    //     }
-    // }, [showMap, pkg?.destinationLocation, destinationAddress, pkg, currentAddress]);
     
     useEffect(() => {
         if (!showMap || !pkg?.currentLocation || !pkg?.destinationLocation) return;
@@ -264,7 +124,7 @@ const TrackingPage = () => {
             container: mapContainerRef.current,
             style: `https://maps.geoapify.com/v1/styles/klokantech-basic/style.json?apiKey=${process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY}`,
             center: [pkg.currentLocation.lng, pkg.currentLocation.lat],
-            zoom: 12,
+            zoom: 2,
         });
 
         mapRef.current = map; // Store reference to prevent multiple instances

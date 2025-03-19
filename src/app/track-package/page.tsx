@@ -9,7 +9,7 @@ import { z } from "zod";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createPackageSchema } from "@/lib/validators";
-import { getRouteFromCoordinates } from "@/lib/utils";
+import { getRouteFromCoordinates, sendEmailNotification } from "@/lib/utils";
 
 async function getAddressFromCoordinates(lat: number, lon: number): Promise<string> {
     const apiKey = process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY;
@@ -119,6 +119,25 @@ export default function TrackPage() {
 
             const destinationAddr = await getAddressFromCoordinates(foundPackage.destinationLocation.lat, foundPackage.destinationLocation.lng);
             setDestinationAddress(destinationAddr);
+
+            // Send email notification if recipient email exists
+            if (foundPackage.recipient.email) {
+                await sendEmailNotification({
+                    to: foundPackage.recipient.email,
+                    subject: `Package Update - ${foundPackage.trackingNumber}`,
+                    text: `
+                        Your package (${foundPackage.trackingNumber}) has been located.
+                        Current Location: ${currentAddr}
+                        Destination: ${destinationAddr}
+                    `,
+                    html: `
+                        <h2>Package Update</h2>
+                        <p>Your package (${foundPackage.trackingNumber}) has been located.</p>
+                        <p><strong>Current Location:</strong> ${currentAddr}</p>
+                        <p><strong>Destination:</strong> ${destinationAddr}</p>
+                    `
+                });
+            }
         } catch (error) {
             console.error("Error tracking package:", error);
             alert("Error fetching package details.");
@@ -170,6 +189,34 @@ export default function TrackPage() {
 
             if (response.ok) {
                 toast.success("Package created successfully!");
+
+                // Send email notifications to both sender and recipient
+                if (formData.sender.email) {
+                    await sendEmailNotification({
+                        to: formData.sender.email,
+                        subject: `Package Created - ${formData.trackingNumber}`,
+                        text: `Your package has been created successfully. Tracking number: ${formData.trackingNumber}`,
+                        html: `
+                            <h2>Package Created Successfully</h2>
+                            <p>Your package has been created with tracking number: ${formData.trackingNumber}</p>
+                            <p>You can track your package using this tracking number.</p>
+                        `
+                    });
+                }
+
+                if (formData.recipient.email) {
+                    await sendEmailNotification({
+                        to: formData.recipient.email,
+                        subject: `Package Coming Your Way - ${formData.trackingNumber}`,
+                        text: `A package is being sent to you. Tracking number: ${formData.trackingNumber}`,
+                        html: `
+                            <h2>Package Coming Your Way</h2>
+                            <p>A package is being sent to you.</p>
+                            <p>Tracking number: ${formData.trackingNumber}</p>
+                            <p>You can track your package using this tracking number.</p>
+                        `
+                    });
+                }
 
                 setFormData({
                     trackingNumber: "", // ✅ Reset trackingNumber
@@ -363,13 +410,6 @@ export default function TrackPage() {
                         <Button onClick={handleTrack} disabled={loading} className="bg-cyan-400 text-navy-900 hover:bg-cyan-300 px-8 py-3 rounded-lg font-bold transition-colors">
                             {loading ? "Tracking..." : "Track Shipment"}
                         </Button>
-
-                        {/* {pkg?.currentLocation && pkg?.destinationLocation && (
-                            <div className="mt-6 bg-gray-100 p-4 rounded-lg shadow-md">
-                                <p className="mt-2"><strong>Current Location:</strong> {pkg.sender.address}</p>
-                                <p className="mt-2"><strong>Final Destination:</strong> {pkg.recipient.address}</p>
-                            </div>
-                        )} */}
                     </div>
                 )}
 
