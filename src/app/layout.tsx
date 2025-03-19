@@ -5,6 +5,7 @@ import { Navbar } from '../components/navbar'
 import { Footer } from '../components/footer'
 import React from 'react'; // Import React
 import { ToastContainer } from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css"; 
 
 const inter = Inter({ subsets: ['latin'] })
 

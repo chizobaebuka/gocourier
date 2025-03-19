@@ -45,7 +45,7 @@ export default function LoginPage() {
                 if (data.role === "admin") {
                     router.push("/admin");
                 } else {
-                    router.push("/home");
+                    router.push("/track-package");
                 }
             } else {
                 toast.error(data.message ?? "Login failed. Please try again.");
